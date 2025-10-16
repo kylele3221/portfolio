@@ -230,14 +230,15 @@ button:active {
 
 .color-scheme select {
   font: inherit;
-  background: var(--surface);
-  color: var(--text);
+  color-scheme: inherit;
+  background: canvas;
+  color: canvastext;
   border: 1px solid var(--border);
   border-radius: 0.4rem;
   padding: 0.15rem 0.4rem;
 }
 
 .color-scheme select option {
-  background: var(--surface);
-  color: var(--text);
+  background: canvas;
+  color: canvastext;
 }
