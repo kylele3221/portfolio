@@ -8,7 +8,7 @@ html {
   color-scheme: light dark;
 }
 
-/* Automatic: follow OS when no override is set */
+/* Automatic: follow OS when no manual override is set */
 @media (prefers-color-scheme: dark) {
   html {
     --bg: oklch(18% 0% 0);
@@ -18,7 +18,7 @@ html {
   }
 }
 
-/* --- Forced overrides via data attribute --- */
+/* Forced overrides via attribute on <html> */
 html[data-color-scheme="light"] {
   color-scheme: light;
   --bg: oklch(99% 0% 0);
@@ -35,7 +35,6 @@ html[data-color-scheme="dark"] {
   --border: oklch(36% 2% 200);
 }
 
-/* Base reset */
 *,
 *::before,
 *::after {

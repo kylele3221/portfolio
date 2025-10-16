@@ -46,7 +46,7 @@ for (let p of pages) {
 }
 
 document.body.insertAdjacentHTML(
-  'beforeend',
+  "beforeend",
   `
   <label class="color-scheme">
     Theme:
@@ -59,14 +59,23 @@ document.body.insertAdjacentHTML(
   `
 );
 
-const select = document.querySelector('.color-scheme select');
+const select = document.querySelector(".color-scheme select");
 
 if ("colorScheme" in localStorage) {
   select.value = localStorage.colorScheme;
-  document.documentElement.style.setProperty('color-scheme', select.value);
 }
 
-select.addEventListener('input', function (event) {
-  document.documentElement.style.setProperty('color-scheme', event.target.value);
-  localStorage.colorScheme = event.target.value;
+function applyScheme(value) {
+  if (value === "light" || value === "dark") {
+    document.documentElement.setAttribute("data-color-scheme", value);
+  } else {
+    document.documentElement.removeAttribute("data-color-scheme");
+  }
+}
+
+applyScheme(select.value);
+
+select.addEventListener("input", (e) => {
+  localStorage.colorScheme = e.target.value;
+  applyScheme(e.target.value);
 });
