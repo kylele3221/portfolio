@@ -8,7 +8,6 @@ html {
   color-scheme: light dark;
 }
 
-/* Automatic: follow OS when no manual override is set */
 @media (prefers-color-scheme: dark) {
   html {
     --bg: oklch(18% 0% 0);
@@ -18,7 +17,6 @@ html {
   }
 }
 
-/* Forced overrides via attribute on <html> */
 html[data-color-scheme="light"] {
   color-scheme: light;
   --bg: oklch(99% 0% 0);
@@ -51,7 +49,9 @@ body {
   scroll-behavior: smooth;
 }
 
-h1 { font-size: 400%; }
+h1 {
+  font-size: 400%;
+}
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;
@@ -64,7 +64,9 @@ a {
   text-underline-offset: 0.2em;
 }
 
-a:hover { text-decoration-thickness: 0.17em; }
+a:hover {
+  text-decoration-thickness: 0.17em;
+}
 
 :focus-visible {
   outline: 0.2em solid var(--color-accent);
@@ -76,7 +78,6 @@ a:hover { text-decoration-thickness: 0.17em; }
   color: white;
 }
 
-/* Nav */
 nav {
   --border-color: oklch(50% 10% 200 / 40%);
   display: flex;
@@ -103,10 +104,13 @@ nav a:hover {
   padding-bottom: 0.1em;
 }
 
-nav a.current:hover { border-bottom-color: var(--color-accent); }
+nav a.current:hover {
+  border-bottom-color: var(--color-accent);
+}
 
-/* Forms & controls */
-input, textarea, button, select { font: inherit; }
+input, textarea, button, select {
+  font: inherit;
+}
 
 form {
   display: grid;
@@ -137,9 +141,10 @@ button:hover {
   box-shadow: 0 0.2rem 0.6rem rgb(0 0 0 / 0.08);
 }
 
-button:active { transform: translateY(1px); }
+button:active {
+  transform: translateY(1px);
+}
 
-/* Projects grid */
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
@@ -159,10 +164,14 @@ button:active { transform: translateY(1px); }
 }
 
 @supports not (grid-template-rows: subgrid) {
-  .projects article { grid-template-rows: auto auto 1fr; }
+  .projects article {
+    grid-template-rows: auto auto 1fr;
+  }
 }
 
-.projects h2 { margin: 0; }
+.projects h2 {
+  margin: 0;
+}
 
 .projects img {
   width: 100%;
@@ -173,8 +182,10 @@ button:active { transform: translateY(1px); }
   border-radius: 0.5rem;
 }
 
-/* CV layout */
-.cv { display: grid; gap: 1.5rem; }
+.cv {
+  display: grid;
+  gap: 1.5rem;
+}
 
 @media (min-width: 50rem) {
   .cv {
@@ -197,11 +208,14 @@ button:active { transform: translateY(1px); }
   background: var(--surface);
 }
 
-.cv .sidebar > section + section { margin-top: 1rem; }
+.cv .sidebar > section + section {
+  margin-top: 1rem;
+}
 
-.cv h2 { margin-top: 0; }
+.cv h2 {
+  margin-top: 0;
+}
 
-/* Theme switch UI */
 .color-scheme {
   position: fixed;
   top: 1rem;
@@ -216,6 +230,14 @@ button:active { transform: translateY(1px); }
 
 .color-scheme select {
   font: inherit;
-  background: transparent;
-  border: none;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  padding: 0.15rem 0.4rem;
+}
+
+.color-scheme select option {
+  background: var(--surface);
+  color: var(--text);
 }
