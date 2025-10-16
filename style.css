@@ -8,6 +8,7 @@ html {
   color-scheme: light dark;
 }
 
+/* Automatic: follow OS when no override is set */
 @media (prefers-color-scheme: dark) {
   html {
     --bg: oklch(18% 0% 0);
@@ -17,6 +18,24 @@ html {
   }
 }
 
+/* --- Forced overrides via data attribute --- */
+html[data-color-scheme="light"] {
+  color-scheme: light;
+  --bg: oklch(99% 0% 0);
+  --text: oklch(18% 0% 0);
+  --surface: oklch(97% 1% 200);
+  --border: oklch(85% 2% 200);
+}
+
+html[data-color-scheme="dark"] {
+  color-scheme: dark;
+  --bg: oklch(18% 0% 0);
+  --text: oklch(96% 0% 0);
+  --surface: oklch(24% 1% 200);
+  --border: oklch(36% 2% 200);
+}
+
+/* Base reset */
 *,
 *::before,
 *::after {
@@ -33,9 +52,7 @@ body {
   scroll-behavior: smooth;
 }
 
-h1 {
-  font-size: 400%;
-}
+h1 { font-size: 400%; }
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;
@@ -48,9 +65,7 @@ a {
   text-underline-offset: 0.2em;
 }
 
-a:hover {
-  text-decoration-thickness: 0.17em;
-}
+a:hover { text-decoration-thickness: 0.17em; }
 
 :focus-visible {
   outline: 0.2em solid var(--color-accent);
@@ -62,6 +77,7 @@ a:hover {
   color: white;
 }
 
+/* Nav */
 nav {
   --border-color: oklch(50% 10% 200 / 40%);
   display: flex;
@@ -88,13 +104,10 @@ nav a:hover {
   padding-bottom: 0.1em;
 }
 
-nav a.current:hover {
-  border-bottom-color: var(--color-accent);
-}
+nav a.current:hover { border-bottom-color: var(--color-accent); }
 
-input, textarea, button {
-  font: inherit;
-}
+/* Forms & controls */
+input, textarea, button, select { font: inherit; }
 
 form {
   display: grid;
@@ -125,10 +138,9 @@ button:hover {
   box-shadow: 0 0.2rem 0.6rem rgb(0 0 0 / 0.08);
 }
 
-button:active {
-  transform: translateY(1px);
-}
+button:active { transform: translateY(1px); }
 
+/* Projects grid */
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
@@ -148,14 +160,10 @@ button:active {
 }
 
 @supports not (grid-template-rows: subgrid) {
-  .projects article {
-    grid-template-rows: auto auto 1fr;
-  }
+  .projects article { grid-template-rows: auto auto 1fr; }
 }
 
-.projects h2 {
-  margin: 0;
-}
+.projects h2 { margin: 0; }
 
 .projects img {
   width: 100%;
@@ -166,10 +174,8 @@ button:active {
   border-radius: 0.5rem;
 }
 
-.cv {
-  display: grid;
-  gap: 1.5rem;
-}
+/* CV layout */
+.cv { display: grid; gap: 1.5rem; }
 
 @media (min-width: 50rem) {
   .cv {
@@ -192,21 +198,25 @@ button:active {
   background: var(--surface);
 }
 
-.cv .sidebar > section + section {
-  margin-top: 1rem;
-}
+.cv .sidebar > section + section { margin-top: 1rem; }
 
-.cv h2 {
-  margin-top: 0;
-}
+.cv h2 { margin-top: 0; }
 
+/* Theme switch UI */
 .color-scheme {
-  position: absolute;
+  position: fixed;
   top: 1rem;
   right: 1rem;
   font-size: 80%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  z-index: 1000;
 }
 
-input, textarea, button, select {
+.color-scheme select {
   font: inherit;
+  background: transparent;
+  border: none;
 }
