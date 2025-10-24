@@ -1,5 +1,5 @@
-import { fetchJSON } from '../global.js';
+import { fetchJSON, renderProjects } from '../global.js';
 
 const data = await fetchJSON('../lib/projects.json');
 const container = document.querySelector('.projects');
-console.log('projects loaded:', data, container);
+renderProjects(data, container, 'h2');
