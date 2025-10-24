@@ -93,4 +93,18 @@ export async function fetchJSON(url) {
   }
 }
 
+export function renderProjects(projects, el, h = 'h2') {
+  if (!el) return;
+  el.innerHTML = '';
+  (projects || []).forEach(p => {
+    const a = document.createElement('article');
+    a.innerHTML = `
+      <${h}>${p.title}</${h}>
+      <img src="${p.image}" alt="">
+      <p>${p.description}</p>
+    `;
+    el.appendChild(a);
+  });
+}
+
 
