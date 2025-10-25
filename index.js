@@ -18,3 +18,4 @@ if (profileStats) {
     </dl>
   `;
 }
+
