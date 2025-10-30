@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "title": "Recipe Rating Prediction",
+    "year": "2024",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Predicted recipe ratings using calories, ingredients, and reviews."
+  },
+  {
+    "title": "Theme Park Wait Time Analysis",
+    "year": "2023",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Analyzed Disneyland and Universal Studios ride wait times."
+  },
+  {
+    "title": "Portfolio Website",
+    "year": "2025",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Personal portfolio built for DSC106 labs and projects."
+  },
+  {
+    "title": "VR Solar Wind Visualization",
+    "year": "2025",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Helped astrophysicists visualize solar winds using VR."
+  },
+  {
+    "title": "GroceryDB Visualization",
+    "year": "2024",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Compared prices and nutritional scores across grocery stores."
+  },
+  {
+    "title": "Movie Sentiment Classifier",
+    "year": "2023",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Built a sentiment model for movie reviews using Python."
+  },
+  {
+    "title": "Football Analytics Dashboard",
+    "year": "2022",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Visualized player stats and team performance metrics."
+  },
+  {
+    "title": "Economic Trends Report",
+    "year": "2021",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Explored relationships between GDP growth and inflation rates."
+  },
+  {
+    "title": "Math Proof Visualizer",
+    "year": "2025",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Interactive tool to visualize group theory and ring concepts."
+  },
+  {
+    "title": "Disney Park Optimization Model",
+    "year": "2023",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Optimized theme park operations using queue and flow data."
+  },
+  {
+    "title": "Data Cleaning Automation Script",
+    "year": "2022",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Wrote Python scripts to automate data preprocessing pipelines."
+  },
+  {
+    "title": "Placeholder Project",
+    "year": "2025",
+    "image": "https://dsc106.com/labs/lab02/images/empty.svg",
+    "description": "Placeholder project for lab visualization testing."
+  }
+]
