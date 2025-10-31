@@ -238,6 +238,15 @@ button:active {
   padding: 0.15rem 0.4rem;
 }
 
+.project-year {
+  color: #666;
+  font-size: 0.9rem;
+  font-family: Baskerville, "Hoefler Text", Garamond, "Times New Roman", serif;
+  font-variant-numeric: oldstyle-nums;
+  margin-top: 0.25rem;
+}
+
+
 .color-scheme select option {
   background: canvas;
   color: canvastext;
