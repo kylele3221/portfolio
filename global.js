@@ -101,11 +101,15 @@ export function renderProjects(projects, el, h = 'h2') {
     a.innerHTML = `
       <${h}>${p.title}</${h}>
       <img src="${p.image}" alt="">
-      <p>${p.description}</p>
+      <div>
+        <p>${p.description || ''}</p>
+        ${p.year ? `<p class="project-year">${p.year}</p>` : ''}
+      </div>
     `;
     el.appendChild(a);
   });
 }
+
 
 export async function fetchGitHubData(username) {
   return fetchJSON(`https://api.github.com/users/${username}`);
