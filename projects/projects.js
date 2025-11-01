@@ -41,10 +41,12 @@ let searchInput = document.querySelector('.searchBar');
 
 searchInput.addEventListener('input', e => {
   query = e.target.value.toLowerCase();
-  let filteredProjects = projects.filter(p =>
-    p.title.toLowerCase().includes(query)
-  );
+  let filteredProjects = projects.filter(p => {
+    let values = Object.values(p).join('\n').toLowerCase();
+    return values.includes(query);
+  });
   container.innerHTML = '';
   renderProjects(filteredProjects, container, 'h2');
 });
+
 
