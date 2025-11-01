@@ -36,3 +36,15 @@ data.forEach((d, idx) => {
     .attr('style', `--color:${colors(idx)}`)
     .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
 });
+
+let searchInput = document.querySelector('.searchBar');
+
+searchInput.addEventListener('input', e => {
+  query = e.target.value.toLowerCase();
+  let filteredProjects = projects.filter(p =>
+    p.title.toLowerCase().includes(query)
+  );
+  container.innerHTML = '';
+  renderProjects(filteredProjects, container, 'h2');
+});
+
