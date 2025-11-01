@@ -11,42 +11,48 @@ const title = document.querySelector('.projects-title');
 if (title) title.textContent = `Projects (${projects.length})`;
 
 const svg = d3.select('#projects-pie-plot');
-const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
-
-const rolledData = d3.rollups(
-  projects,
-  v => v.length,
-  d => d.year
-);
-
-const data = rolledData.map(([year, count]) => ({ value: count, label: year }));
-const sliceGenerator = d3.pie().value(d => d.value);
-const arcData = sliceGenerator(data);
-const arcs = arcData.map(d => arcGenerator(d));
-const colors = d3.scaleOrdinal(d3.schemeTableau10);
-
-arcs.forEach((arc, idx) => {
-  svg.append('path').attr('d', arc).attr('fill', colors(idx));
-});
-
 const legend = d3.select('.legend');
-data.forEach((d, idx) => {
-  legend
-    .append('li')
-    .attr('style', `--color:${colors(idx)}`)
-    .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
-});
 
-let searchInput = document.querySelector('.searchBar');
+function renderPieChart(projectsGiven) {
+  svg.selectAll('path').remove();
+  legend.selectAll('li').remove();
+
+  const rolledData = d3.rollups(
+    projectsGiven,
+    v => v.length,
+    d => d.year
+  );
+
+  const data = rolledData.map(([year, count]) => ({ value: count, label: year }));
+  const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
+  const sliceGenerator = d3.pie().value(d => d.value);
+  const arcData = sliceGenerator(data);
+  const arcs = arcData.map(d => arcGenerator(d));
+  const colors = d3.scaleOrdinal(d3.schemeTableau10);
+
+  arcs.forEach((arc, idx) => {
+    svg.append('path').attr('d', arc).attr('fill', colors(idx));
+  });
+
+  data.forEach((d, idx) => {
+    legend
+      .append('li')
+      .attr('style', `--color:${colors(idx)}`)
+      .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+  });
+}
+
+renderPieChart(projects);
+
+const searchInput = document.querySelector('.searchBar');
 
 searchInput.addEventListener('input', e => {
   query = e.target.value.toLowerCase();
-  let filteredProjects = projects.filter(p => {
-    let values = Object.values(p).join('\n').toLowerCase();
+  const filteredProjects = projects.filter(p => {
+    const values = Object.values(p).join('\n').toLowerCase();
     return values.includes(query);
   });
   container.innerHTML = '';
   renderProjects(filteredProjects, container, 'h2');
+  renderPieChart(filteredProjects);
 });
-
-
