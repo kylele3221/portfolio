@@ -28,3 +28,11 @@ const colors = d3.scaleOrdinal(d3.schemeTableau10);
 arcs.forEach((arc, idx) => {
   svg.append('path').attr('d', arc).attr('fill', colors(idx));
 });
+
+const legend = d3.select('.legend');
+pieData.forEach((d, idx) => {
+  legend
+    .append('li')
+    .attr('style', `--color:${colors(idx)}`)
+    .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+});
