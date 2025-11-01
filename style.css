@@ -302,3 +302,20 @@ button:active {
 }
 
 
+#projects-pie-plot path {
+  cursor: pointer;
+}
+
+.selected {
+  --color: oklch(60% 0.45 0);
+}
+
+#projects-pie-plot path.selected {
+  fill: var(--color);
+}
+
+.legend li.selected .swatch {
+  background: var(--color);
+}
+
+
