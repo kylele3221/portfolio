@@ -10,8 +10,17 @@ if (title) title.textContent = `Projects (${data.length})`;
 
 const svg = d3.select('#projects-pie-plot');
 const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
-const pieData = [1, 2, 3, 4, 5, 5];
-const sliceGenerator = d3.pie();
+
+const pieData = [
+  { value: 1, label: 'apples' },
+  { value: 2, label: 'oranges' },
+  { value: 3, label: 'mangos' },
+  { value: 4, label: 'pears' },
+  { value: 5, label: 'limes' },
+  { value: 5, label: 'cherries' }
+];
+
+const sliceGenerator = d3.pie().value(d => d.value);
 const arcData = sliceGenerator(pieData);
 const arcs = arcData.map(d => arcGenerator(d));
 const colors = d3.scaleOrdinal(d3.schemeTableau10);
