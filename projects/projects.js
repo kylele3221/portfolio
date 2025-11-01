@@ -7,7 +7,7 @@ const container = document.querySelector('.projects');
 renderProjects(data, container, 'h2');
 
 const title = document.querySelector('.projects-title');
-if (title) title.textContent = Projects (${data.length});
+if (title) title.textContent = `Projects (${data.length})`;
 
 // D3 PIE STUFF STARTS HERE
 const svg = d3.select('#projects-pie-plot');
