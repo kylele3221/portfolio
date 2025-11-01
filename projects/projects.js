@@ -9,18 +9,13 @@ const title = document.querySelector('.projects-title');
 if (title) title.textContent = `Projects (${data.length})`;
 
 const svg = d3.select('#projects-pie-plot');
-
 const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
-
-const pieData = [1, 2];
-
+const pieData = [1, 2, 3, 4, 5, 5];
 const sliceGenerator = d3.pie();
 const arcData = sliceGenerator(pieData);
-
 const arcs = arcData.map(d => arcGenerator(d));
-
-const colors = ['gold', 'purple'];
+const colors = d3.scaleOrdinal(d3.schemeTableau10);
 
 arcs.forEach((arc, idx) => {
-  svg.append('path').attr('d', arc).attr('fill', colors[idx]);
+  svg.append('path').attr('d', arc).attr('fill', colors(idx));
 });
