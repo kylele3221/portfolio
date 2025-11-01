@@ -38,7 +38,15 @@ function renderPieChart(projectsGiven) {
       .attr('class', selectedIndex === idx ? 'selected' : '')
       .on('click', () => {
         selectedIndex = selectedIndex === idx ? -1 : idx;
-        renderPieChart(projectsGiven);
+        if (selectedIndex === -1) {
+          renderProjects(projectsGiven, container, 'h2');
+          renderPieChart(projectsGiven);
+        } else {
+          const year = data[idx].label;
+          const filtered = projectsGiven.filter(p => p.year === year);
+          renderProjects(filtered, container, 'h2');
+          renderPieChart(filtered);
+        }
       });
   });
 
@@ -49,7 +57,15 @@ function renderPieChart(projectsGiven) {
       .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
       .on('click', () => {
         selectedIndex = selectedIndex === idx ? -1 : idx;
-        renderPieChart(projectsGiven);
+        if (selectedIndex === -1) {
+          renderProjects(projectsGiven, container, 'h2');
+          renderPieChart(projectsGiven);
+        } else {
+          const year = data[idx].label;
+          const filtered = projectsGiven.filter(p => p.year === year);
+          renderProjects(filtered, container, 'h2');
+          renderPieChart(filtered);
+        }
       });
   });
 }
@@ -66,5 +82,6 @@ searchInput.addEventListener('input', e => {
   });
   container.innerHTML = '';
   renderProjects(filteredProjects, container, 'h2');
+  selectedIndex = -1;
   renderPieChart(filteredProjects);
 });
