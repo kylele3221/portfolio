@@ -283,3 +283,14 @@ button:active {
   display: inline-block;
 }
 
+.container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.legend {
+  flex: 1;
+}
+
+
