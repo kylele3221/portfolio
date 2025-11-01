@@ -3,6 +3,7 @@ import { fetchJSON, renderProjects } from '../global.js';
 
 let query = '';
 let selectedIndex = -1;
+let currentData = [];
 
 const projects = await fetchJSON('../lib/projects.json');
 const container = document.querySelector('.projects');
@@ -13,6 +14,17 @@ if (title) title.textContent = `Projects (${projects.length})`;
 
 const svg = d3.select('#projects-pie-plot');
 const legend = d3.select('.legend');
+
+function applyFilters(baseProjects) {
+  let filtered = baseProjects.filter(p =>
+    Object.values(p).join('\n').toLowerCase().includes(query)
+  );
+  if (selectedIndex !== -1 && currentData[selectedIndex]) {
+    const year = currentData[selectedIndex].label;
+    filtered = filtered.filter(p => p.year === year);
+  }
+  return filtered;
+}
 
 function renderPieChart(projectsGiven) {
   svg.selectAll('path').remove();
@@ -25,6 +37,7 @@ function renderPieChart(projectsGiven) {
   );
 
   const data = rolledData.map(([year, count]) => ({ value: count, label: year }));
+  currentData = data;
   const arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
   const sliceGenerator = d3.pie().value(d => d.value);
   const arcData = sliceGenerator(data);
@@ -38,15 +51,10 @@ function renderPieChart(projectsGiven) {
       .attr('class', selectedIndex === idx ? 'selected' : '')
       .on('click', () => {
         selectedIndex = selectedIndex === idx ? -1 : idx;
-        if (selectedIndex === -1) {
-          renderProjects(projectsGiven, container, 'h2');
-          renderPieChart(projectsGiven);
-        } else {
-          const year = data[idx].label;
-          const filtered = projectsGiven.filter(p => p.year === year);
-          renderProjects(filtered, container, 'h2');
-          renderPieChart(filtered);
-        }
+        const filtered = applyFilters(projects);
+        container.innerHTML = '';
+        renderProjects(filtered, container, 'h2');
+        renderPieChart(filtered);
       });
   });
 
@@ -57,15 +65,10 @@ function renderPieChart(projectsGiven) {
       .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
       .on('click', () => {
         selectedIndex = selectedIndex === idx ? -1 : idx;
-        if (selectedIndex === -1) {
-          renderProjects(projectsGiven, container, 'h2');
-          renderPieChart(projectsGiven);
-        } else {
-          const year = data[idx].label;
-          const filtered = projectsGiven.filter(p => p.year === year);
-          renderProjects(filtered, container, 'h2');
-          renderPieChart(filtered);
-        }
+        const filtered = applyFilters(projects);
+        container.innerHTML = '';
+        renderProjects(filtered, container, 'h2');
+        renderPieChart(filtered);
       });
   });
 }
@@ -76,12 +79,8 @@ const searchInput = document.querySelector('.searchBar');
 
 searchInput.addEventListener('input', e => {
   query = e.target.value.toLowerCase();
-  const filteredProjects = projects.filter(p => {
-    const values = Object.values(p).join('\n').toLowerCase();
-    return values.includes(query);
-  });
+  const filtered = applyFilters(projects);
   container.innerHTML = '';
-  renderProjects(filteredProjects, container, 'h2');
-  selectedIndex = -1;
-  renderPieChart(filteredProjects);
+  renderProjects(filtered, container, 'h2');
+  renderPieChart(filtered);
 });
