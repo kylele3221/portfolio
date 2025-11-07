@@ -95,11 +95,9 @@ function updateTooltipVisibility(isVisible) {
   tooltip.hidden = !isVisible;
 }
 
-
 function renderScatterPlot(data, commits) {
   const width = 1000;
   const height = 600;
-
   const margin = { top: 10, right: 10, bottom: 30, left: 20 };
 
   const usableArea = {
@@ -128,13 +126,7 @@ function renderScatterPlot(data, commits) {
     .domain([0, 24])
     .range([usableArea.bottom, usableArea.top]);
 
-  const xAxis = d3.axisBottom(xScale);
-
-  const yAxis = d3
-    .axisLeft(yScale)
-    .tickFormat(d => String(d % 24).padStart(2, '0') + ':00');
-
-  // 🔹 GRIDLINES (add before axes)
+  // gridlines
   const gridlines = svg
     .append('g')
     .attr('class', 'gridlines')
@@ -145,6 +137,11 @@ function renderScatterPlot(data, commits) {
   );
 
   // axes
+  const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3
+    .axisLeft(yScale)
+    .tickFormat(d => String(d % 24).padStart(2, '0') + ':00');
+
   svg
     .append('g')
     .attr('transform', `translate(0, ${usableArea.bottom})`)
@@ -167,12 +164,12 @@ function renderScatterPlot(data, commits) {
     .attr('fill', 'steelblue')
     .on('mouseenter', (event, commit) => {
       renderTooltipContent(commit);
+      updateTooltipVisibility(true);
     })
     .on('mouseleave', () => {
-      // TODO: hide tooltip later if you want
+      updateTooltipVisibility(false);
     });
 }
-
 
 let data = await loadData();
 let commits = processCommits(data);
