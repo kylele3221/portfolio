@@ -158,7 +158,7 @@ function renderScatterPlot(data, commits) {
 
   const [minLines, maxLines] = d3.extent(commits, d => d.totalLines);
   const rScale = d3
-    .scaleLinear()
+    .scaleSqrt()
     .domain([minLines, maxLines])
     .range([2, 30]);
 
