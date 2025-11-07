@@ -246,7 +246,6 @@ button:active {
   margin-top: 0.25rem;
 }
 
-
 .color-scheme select option {
   background: canvas;
   color: canvastext;
@@ -300,7 +299,6 @@ button:active {
 #projects-pie-plot:has(path:hover) path:not(:hover) {
   opacity: 0.5;
 }
-
 
 #projects-pie-plot path {
   cursor: pointer;
@@ -357,13 +355,14 @@ dl.info {
   background: var(--surface);
   max-width: 24rem;
   font-size: 0.9rem;
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
 }
 
 dl.info[hidden]:not(:hover, :focus-within) {
   opacity: 0;
   visibility: hidden;
 }
-
 
 dl.info dt {
   margin: 0;
@@ -387,7 +386,6 @@ dl.info dd {
   backdrop-filter: blur(8px);
 }
 
-
 circle {
   transition: 200ms;
   transform-origin: center;
@@ -397,5 +395,3 @@ circle {
 circle:hover {
   transform: scale(1.5);
 }
-
-
