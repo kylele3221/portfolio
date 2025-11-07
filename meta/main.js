@@ -101,19 +101,19 @@ function updateTooltipPosition(event) {
   tooltip.style.top = `${event.clientY}px`;
 }
 
-function createBrushSelector(svg, usableArea) {
+function createBrushSelector(svg, usableArea, brushed) {
   const brush = d3
     .brush()
     .extent([
       [usableArea.left, usableArea.top],
       [usableArea.right, usableArea.bottom],
-    ]);
+    ])
+    .on('start brush end', brushed);
 
   svg.call(brush);
 
   svg.selectAll('.dots, .overlay ~ *').raise();
 }
-
 
 
 function renderScatterPlot(data, commits) {
@@ -147,6 +147,24 @@ function renderScatterPlot(data, commits) {
     .domain([0, 24])
     .range([usableArea.bottom, usableArea.top]);
 
+    function isCommitSelected(selection, commit) {
+    if (!selection) return false;
+
+    const [[x0, y0], [x1, y1]] = selection;
+    const x = xScale(commit.datetime);
+    const y = yScale(commit.hourFrac);
+
+    return x0 <= x && x <= x1 && y0 <= y && y <= y1;
+  }
+
+  function brushed(event) {
+    const selection = event.selection;
+    d3
+      .selectAll('.dots circle')
+      .classed('selected', d => isCommitSelected(selection, d));
+  }
+
+  
   const gridlines = svg
     .append('g')
     .attr('class', 'gridlines')
@@ -200,8 +218,9 @@ function renderScatterPlot(data, commits) {
       d3.select(event.currentTarget).style('fill-opacity', 0.7);
       updateTooltipVisibility(false);
     });
-    createBrushSelector(svg, usableArea);
+    createBrushSelector(svg, usableArea, brushed);
 }
+
 
 let data = await loadData();
 let commits = processCommits(data);
