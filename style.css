@@ -338,3 +338,12 @@ button:active {
   text-align: right;
 }
 
+.gridlines line {
+  stroke: var(--border);
+  stroke-opacity: 0.4;
+}
+
+.gridlines path {
+  display: none;
+}
+
