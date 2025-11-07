@@ -156,13 +156,29 @@ function renderScatterPlot(data, commits) {
 
     return x0 <= x && x <= x1 && y0 <= y && y <= y1;
   }
+  function renderSelectionCount(selection) {
+    const selectedCommits = selection
+      ? commits.filter(d => isCommitSelected(selection, d))
+      : [];
+
+    const countElement = document.querySelector('#selection-count');
+    countElement.textContent = `${
+      selectedCommits.length || 'No'
+    } commits selected`;
+
+    return selectedCommits;
+  }
 
   function brushed(event) {
     const selection = event.selection;
+
     d3
       .selectAll('.dots circle')
       .classed('selected', d => isCommitSelected(selection, d));
+
+    renderSelectionCount(selection);
   }
+
 
   
   const gridlines = svg
