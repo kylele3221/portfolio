@@ -318,4 +318,23 @@ button:active {
   background: var(--color);
 }
 
+.stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.stats dt {
+  font-weight: 600;
+}
+
+.stats dd {
+  margin: 0;
+  text-align: right;
+}
 
