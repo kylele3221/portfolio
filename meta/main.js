@@ -159,8 +159,15 @@ function renderScatterPlot(data, commits) {
     .attr('cx', d => xScale(d.datetime))
     .attr('cy', d => yScale(d.hourFrac))
     .attr('r', 5)
-    .attr('fill', 'steelblue');
+    .attr('fill', 'steelblue')
+    .on('mouseenter', (event, commit) => {
+      renderTooltipContent(commit);
+    })
+    .on('mouseleave', () => {
+      // TODO: hide tooltip later if you want
+    });
 }
+
 
 let data = await loadData();
 let commits = processCommits(data);
