@@ -95,6 +95,12 @@ function updateTooltipVisibility(isVisible) {
   tooltip.hidden = !isVisible;
 }
 
+function updateTooltipPosition(event) {
+  const tooltip = document.getElementById('commit-tooltip');
+  tooltip.style.left = `${event.clientX}px`;
+  tooltip.style.top = `${event.clientY}px`;
+}
+
 function renderScatterPlot(data, commits) {
   const width = 1000;
   const height = 600;
@@ -126,7 +132,6 @@ function renderScatterPlot(data, commits) {
     .domain([0, 24])
     .range([usableArea.bottom, usableArea.top]);
 
-  // gridlines
   const gridlines = svg
     .append('g')
     .attr('class', 'gridlines')
@@ -136,7 +141,6 @@ function renderScatterPlot(data, commits) {
     d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width)
   );
 
-  // axes
   const xAxis = d3.axisBottom(xScale);
   const yAxis = d3
     .axisLeft(yScale)
@@ -165,6 +169,7 @@ function renderScatterPlot(data, commits) {
     .on('mouseenter', (event, commit) => {
       renderTooltipContent(commit);
       updateTooltipVisibility(true);
+      updateTooltipPosition(event);
     })
     .on('mouseleave', () => {
       updateTooltipVisibility(false);
