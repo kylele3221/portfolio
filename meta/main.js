@@ -101,6 +101,18 @@ function updateTooltipPosition(event) {
   tooltip.style.top = `${event.clientY}px`;
 }
 
+function createBrushSelector(svg, usableArea) {
+  const brush = d3
+    .brush()
+    .extent([
+      [usableArea.left, usableArea.top],
+      [usableArea.right, usableArea.bottom],
+    ]);
+
+  svg.append('g').attr('class', 'brush').call(brush);
+}
+
+
 function renderScatterPlot(data, commits) {
   const width = 1000;
   const height = 600;
@@ -185,6 +197,7 @@ function renderScatterPlot(data, commits) {
       d3.select(event.currentTarget).style('fill-opacity', 0.7);
       updateTooltipVisibility(false);
     });
+    createBrushSelector(svg, usableArea);
 }
 
 let data = await loadData();
