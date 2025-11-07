@@ -410,3 +410,8 @@ circle:hover {
   animation: marching-ants 2s linear infinite;
 }
 
+circle.selected {
+  fill: #ff6b6b;
+}
+
+
