@@ -109,8 +109,11 @@ function createBrushSelector(svg, usableArea) {
       [usableArea.right, usableArea.bottom],
     ]);
 
-  svg.append('g').attr('class', 'brush').call(brush);
+  svg.call(brush);
+
+  svg.selectAll('.dots, .overlay ~ *').raise();
 }
+
 
 
 function renderScatterPlot(data, commits) {
