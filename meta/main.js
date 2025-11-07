@@ -102,3 +102,9 @@ function renderScatterPlot(data, commits) {
     .attr('fill', 'steelblue')
 }
 
+let data = await loadData()
+let commits = processCommits(data)
+
+renderCommitInfo(data, commits)
+renderScatterPlot(data, commits)
+
