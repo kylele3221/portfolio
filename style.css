@@ -375,7 +375,12 @@ dl.info dd {
   top: 1em;
   left: 1em;
   z-index: 900;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0.4rem 1rem rgb(0 0 0 / 0.15);
+  border-radius: 0.6rem;
+  backdrop-filter: blur(8px);
 }
+
 
 circle {
   transition: 200ms;
