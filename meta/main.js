@@ -37,6 +37,37 @@ function processCommits(data) {
     });
 }
 
+function renderCommitInfo(data, commits) {
+  const dl = d3.select('#stats').append('dl').attr('class', 'stats');
+
+  dl.append('dt').html('Total <abbr title="Lines of code">LOC</abbr>');
+  dl.append('dd').text(data.length);
+
+  dl.append('dt').text('Total commits');
+  dl.append('dd').text(commits.length);
+
+  const numFiles = d3.group(data, d => d.file).size;
+  dl.append('dt').text('Files');
+  dl.append('dd').text(numFiles);
+
+  const maxDepth = d3.max(data, d => d.depth);
+  dl.append('dt').text('Max depth');
+  dl.append('dd').text(maxDepth);
+
+  const avgLineLength = d3.mean(data, d => d.length) || 0;
+  dl.append('dt').text('Avg line length');
+  dl.append('dd').text(avgLineLength.toFixed(1));
+
+  const fileLengths = d3.rollups(
+    data,
+    v => d3.max(v, d => d.line),
+    d => d.file
+  );
+  const avgFileLength = d3.mean(fileLengths, d => d[1]) || 0;
+  dl.append('dt').text('Avg file length');
+  dl.append('dd').text(avgFileLength.toFixed(1));
+}
+
 let data = await loadData();
 let commits = processCommits(data);
-console.log(commits);
+renderCommitInfo(data, commits);
