@@ -359,6 +359,12 @@ dl.info {
   font-size: 0.9rem;
 }
 
+dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+
 dl.info dt {
   margin: 0;
   opacity: 0.7;
