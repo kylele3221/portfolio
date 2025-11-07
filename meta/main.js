@@ -68,6 +68,29 @@ function renderCommitInfo(data, commits) {
   dl.append('dd').text(avgFileLength.toFixed(1));
 }
 
+function renderTooltipContent(commit) {
+  const link = document.getElementById('commit-link');
+  const date = document.getElementById('commit-date');
+  const time = document.getElementById('commit-time');
+  const author = document.getElementById('commit-author');
+  const lines = document.getElementById('commit-lines');
+
+  if (!commit || Object.keys(commit).length === 0) return;
+
+  link.href = commit.url;
+  link.textContent = commit.id;
+
+  date.textContent =
+    commit.datetime?.toLocaleString('en', { dateStyle: 'full' }) ?? '';
+
+  time.textContent =
+    commit.datetime?.toLocaleString('en', { timeStyle: 'short' }) ?? '';
+
+  author.textContent = commit.author ?? '';
+  lines.textContent = commit.totalLines ?? '';
+}
+
+
 function renderScatterPlot(data, commits) {
   const width = 1000;
   const height = 600;
