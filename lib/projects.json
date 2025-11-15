@@ -74,7 +74,7 @@
   {
     "title": "Bikewatching: Bluebikes Traffic",
     "year": "2025",
-    "image": "images/bikewatching.jpg",
+    "image": "https://dsc106.com/labs/lab02/images/bikewatching.jpg",
     "description": "Interactive map visualizing Boston and Cambridge bike lanes with Bluebikes station traffic. Includes time-based filtering and color-coded traffic flow using D3 and Mapbox."
   }
 ]
