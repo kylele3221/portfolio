@@ -4,50 +4,50 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meta Analysis</title>
+
+  <!-- Global + Meta CSS -->
   <link rel="stylesheet" href="../style.css" />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <h1>Meta Analysis</h1>
-  <p>Statistics and evolution of my portfolio codebase.</p>
 
-  <!-- Slider filter UI -->
+  <h1>Meta Analysis</h1>
+  <p>Statistics and evolution of my repo.</p>
+
+  <!-- Slider -->
   <div class="commit-filter">
-    <label for="commit-progress">
+    <label>
       Show commits until:
       <input id="commit-progress" type="range" min="0" max="100" value="100" />
       <time id="commit-time"></time>
     </label>
   </div>
 
-  <!-- Scrollytelling wrapper -->
+  <!-- Scrolly container -->
   <div id="scrolly-1">
+
+    <!-- LEFT: story text -->
     <div id="scatter-story">
-      <!-- You can replace this with your actual narrative later -->
-      <p>
-        As time goes on, my commits cluster at different times of day and grow in size.
-        Use the slider above or scroll through the story to explore how this project evolved.
-      </p>
+      <p>some filler text here</p>
     </div>
 
+    <!-- RIGHT: scatter plot + stats -->
     <div id="scatter-plot">
       <div id="stats"></div>
 
       <h2>Commits by time of day</h2>
+
       <div id="chart"></div>
+
       <p id="selection-count">No commits selected</p>
 
       <dl id="language-breakdown" class="stats"></dl>
 
+      <!-- Tooltip -->
       <dl id="commit-tooltip" class="info tooltip" hidden>
         <dt>Commit</dt>
         <dd>
-          <a
-            href=""
-            id="commit-link"
-            target="_blank"
-            rel="noopener noreferrer"
-          ></a>
+          <a id="commit-link" target="_blank"></a>
         </dd>
 
         <dt>Date</dt>
@@ -63,9 +63,10 @@
         <dd id="commit-lines"></dd>
       </dl>
     </div>
+
   </div>
 
-  <!-- File unit visualization (moved to bottom for Step 3) -->
+  <!-- Unit viz moved to bottom as required -->
   <dl id="files"></dl>
 
   <script type="module" src="../global.js"></script>
