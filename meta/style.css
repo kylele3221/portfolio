@@ -1,8 +1,61 @@
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 2rem;
+}
+
 .commit-filter {
   display: flex;
   align-items: baseline;
+  margin-bottom: 1rem;
 }
 
 .commit-filter time {
   margin-left: auto;
+}
+
+.stats {
+  margin-bottom: 1.5rem;
+}
+
+#chart {
+  margin-top: 1rem;
+}
+
+svg {
+  max-width: 100%;
+}
+
+circle {
+  transition: all 200ms, r calc(var(--r) * 100ms);
+
+  @starting-style {
+    r: 0;
+  }
+}
+
+circle.selected {
+  stroke: black;
+  stroke-width: 2px;
+}
+
+.gridlines line {
+  stroke: #ddd;
+}
+
+.tooltip {
+  position: fixed;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: 10;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin: 0 0 0.5rem 0;
 }
