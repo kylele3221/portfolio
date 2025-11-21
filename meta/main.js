@@ -6,6 +6,8 @@ let allData;
 let allCommits;
 let filteredCommits;
 
+let colors = d3.scaleOrdinal(d3.schemeTableau10);
+
 async function loadData() {
   const data = await d3.csv('loc.csv', row => ({
     ...row,
@@ -370,7 +372,9 @@ function updateFileDisplay(filteredCommits) {
     .selectAll('div')
     .data(d => d.lines)
     .join('div')
-    .attr('class', 'loc');
+    .attr('class', 'loc')
+    .style('--color', d => colors(d.type));
+
 }
 
 /* =========================
