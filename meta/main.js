@@ -71,7 +71,7 @@ function renderCommitInfo(data, commits) {
 function renderTooltipContent(commit) {
   const link = document.getElementById('commit-link');
   const date = document.getElementById('commit-date');
-  const time = document.getElementById('commit-time');
+  const time = document.getElementById('commit-tooltip-time');
   const author = document.getElementById('commit-author');
   const lines = document.getElementById('commit-lines');
 
@@ -79,13 +79,10 @@ function renderTooltipContent(commit) {
 
   link.href = commit.url;
   link.textContent = commit.id;
-
   date.textContent =
     commit.datetime?.toLocaleString('en', { dateStyle: 'full' }) ?? '';
-
   time.textContent =
     commit.datetime?.toLocaleString('en', { timeStyle: 'short' }) ?? '';
-
   author.textContent = commit.author ?? '';
   lines.textContent = commit.totalLines ?? '';
 }
@@ -111,10 +108,8 @@ function createBrushSelector(svg, usableArea, brushed) {
     .on('start brush end', brushed);
 
   svg.call(brush);
-
   svg.selectAll('.dots, .overlay ~ *').raise();
 }
-
 
 function renderScatterPlot(data, commits) {
   const width = 1000;
@@ -147,34 +142,31 @@ function renderScatterPlot(data, commits) {
     .domain([0, 24])
     .range([usableArea.bottom, usableArea.top]);
 
-    function isCommitSelected(selection, commit) {
+  function isCommitSelected(selection, commit) {
     if (!selection) return false;
-
     const [[x0, y0], [x1, y1]] = selection;
     const x = xScale(commit.datetime);
     const y = yScale(commit.hourFrac);
-
     return x0 <= x && x <= x1 && y0 <= y && y <= y1;
   }
+
   function renderSelectionCount(selection) {
     const selectedCommits = selection
       ? commits.filter(d => isCommitSelected(selection, d))
       : [];
-
     const countElement = document.querySelector('#selection-count');
     countElement.textContent = `${
       selectedCommits.length || 'No'
     } commits selected`;
-
     return selectedCommits;
   }
-    function renderLanguageBreakdown(selection) {
+
+  function renderLanguageBreakdown(selection) {
     const selectedCommits = selection
       ? commits.filter(d => isCommitSelected(selection, d))
       : [];
 
     const container = document.getElementById('language-breakdown');
-
     if (selectedCommits.length === 0) {
       container.innerHTML = '';
       return;
@@ -202,21 +194,6 @@ function renderScatterPlot(data, commits) {
     }
   }
 
-
-  function brushed(event) {
-    const selection = event.selection;
-
-    d3
-      .selectAll('.dots circle')
-      .classed('selected', d => isCommitSelected(selection, d));
-
-    renderSelectionCount(selection);
-    renderLanguageBreakdown(selection);
-  }
-
-
-
-  
   const gridlines = svg
     .append('g')
     .attr('class', 'gridlines')
@@ -242,10 +219,7 @@ function renderScatterPlot(data, commits) {
     .call(yAxis);
 
   const [minLines, maxLines] = d3.extent(commits, d => d.totalLines);
-  const rScale = d3
-    .scaleSqrt()
-    .domain([minLines, maxLines])
-    .range([2, 30]);
+  const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
 
   const sortedCommits = d3.sort(commits, d => -d.totalLines);
 
@@ -266,16 +240,50 @@ function renderScatterPlot(data, commits) {
       updateTooltipVisibility(true);
       updateTooltipPosition(event);
     })
-    .on('mouseleave', event => {
-      d3.select(event.currentTarget).style('fill-opacity', 0.7);
+    .on('mouseleave', () => {
       updateTooltipVisibility(false);
     });
-    createBrushSelector(svg, usableArea, brushed);
-}
 
+  createBrushSelector(svg, usableArea, () => {});
+}
 
 let data = await loadData();
 let commits = processCommits(data);
 
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
+
+/* =========================
+   STEP 1.1 – TIME SLIDER
+========================= */
+
+let commitProgress = 100;
+
+let timeScale = d3
+  .scaleTime()
+  .domain([
+    d3.min(commits, d => d.datetime),
+    d3.max(commits, d => d.datetime),
+  ])
+  .range([0, 100]);
+
+let commitMaxTime = timeScale.invert(commitProgress);
+
+function onTimeSliderChange() {
+  const slider = document.querySelector('#commit-progress');
+  const timeEl = document.querySelector('#commit-time');
+
+  commitProgress = +slider.value;
+  commitMaxTime = timeScale.invert(commitProgress);
+
+  timeEl.textContent = commitMaxTime.toLocaleString(undefined, {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  });
+}
+
+const slider = document.querySelector('#commit-progress');
+if (slider) {
+  slider.addEventListener('input', onTimeSliderChange);
+  onTimeSliderChange();
+}
