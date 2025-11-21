@@ -1,1 +1,8 @@
+.commit-filter {
+  display: flex;
+  align-items: baseline;
+}
 
+.commit-filter time {
+  margin-left: auto;
+}
