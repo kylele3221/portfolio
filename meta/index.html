@@ -1,52 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meta Analysis</title>
-  <link rel="stylesheet" href="../style.css">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <h1>Meta Analysis</h1>
-  <p>Statistics about my codebase.</p>
+  <p>Statistics and evolution of my portfolio codebase.</p>
 
+  <!-- Slider filter UI -->
   <div class="commit-filter">
     <label for="commit-progress">
       Show commits until:
-      <input id="commit-progress" type="range" min="0" max="100" value="100">
+      <input id="commit-progress" type="range" min="0" max="100" value="100" />
       <time id="commit-time"></time>
     </label>
   </div>
+
+  <!-- Scrollytelling wrapper -->
+  <div id="scrolly-1">
+    <div id="scatter-story">
+      <!-- You can replace this with your actual narrative later -->
+      <p>
+        As time goes on, my commits cluster at different times of day and grow in size.
+        Use the slider above or scroll through the story to explore how this project evolved.
+      </p>
+    </div>
+
+    <div id="scatter-plot">
+      <div id="stats"></div>
+
+      <h2>Commits by time of day</h2>
+      <div id="chart"></div>
+      <p id="selection-count">No commits selected</p>
+
+      <dl id="language-breakdown" class="stats"></dl>
+
+      <dl id="commit-tooltip" class="info tooltip" hidden>
+        <dt>Commit</dt>
+        <dd>
+          <a
+            href=""
+            id="commit-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          ></a>
+        </dd>
+
+        <dt>Date</dt>
+        <dd id="commit-date"></dd>
+
+        <dt>Time</dt>
+        <dd id="commit-tooltip-time"></dd>
+
+        <dt>Author</dt>
+        <dd id="commit-author"></dd>
+
+        <dt>Lines edited</dt>
+        <dd id="commit-lines"></dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- File unit visualization (moved to bottom for Step 3) -->
   <dl id="files"></dl>
-
-  <div id="stats"></div>
-
-  <h2>Commits by time of day</h2>
-  <div id="chart"></div>
-  <p id="selection-count">No commits selected</p>
-
-  <dl id="language-breakdown" class="stats"></dl>
-
-  <dl id="commit-tooltip" class="info tooltip" hidden>
-    <dt>Commit</dt>
-    <dd>
-      <a href="" id="commit-link" target="_blank" rel="noopener noreferrer"></a>
-    </dd>
-
-    <dt>Date</dt>
-    <dd id="commit-date"></dd>
-
-    <dt>Time</dt>
-    <!-- note: this id matches main.js (commit-tooltip-time) -->
-    <dd id="commit-tooltip-time"></dd>
-
-    <dt>Author</dt>
-    <dd id="commit-author"></dd>
-
-    <dt>Lines edited</dt>
-    <dd id="commit-lines"></dd>
-  </dl>
 
   <script type="module" src="../global.js"></script>
   <script type="module" src="./main.js"></script>
