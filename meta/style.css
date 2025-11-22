@@ -1,3 +1,5 @@
+/* Base */
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   margin: 0;
@@ -15,35 +17,43 @@ body {
   margin-left: auto;
 }
 
-/* Scrolly layout */
+/* ============================
+   SCROLLY FULL-WIDTH LAYOUT
+============================ */
 
 #scrolly-1 {
   position: relative;
   display: flex;
   gap: 1.5rem;
-  margin: 0 2rem 2rem 2rem;
-  align-items: flex-start;
+
+  /* Full-bleed effect */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 1.5rem 2rem 2rem 2rem;
+  box-sizing: border-box;
 }
 
-/* make text column narrower */
+/* Left column (story) */
 #scatter-story {
   position: relative;
   flex: 1;
-  max-width: 22rem;
+  max-width: 24rem;
 }
 
-/* make plot column wider + give it a background so dots don't show through */
+/* Right column (plot) */
 #scatter-plot {
   flex: 3;
   position: sticky;
   top: 0;
   left: 0;
   bottom: auto;
-  height: 70vh;              /* still satisfies “sticky needs a height” */
+  height: 50vh;
   background: #ffffff;
 }
 
-/* Chart */
+/* ============================
+   Scatter Plot
+============================ */
 
 #chart {
   margin-top: 1rem;
@@ -51,6 +61,20 @@ body {
 
 svg {
   max-width: 100%;
+}
+
+circle {
+  transition: all 200ms;
+}
+
+circle.selected {
+  stroke: black;
+  stroke-width: 2px;
+}
+
+/* Gridlines */
+.gridlines line {
+  stroke: #ddd;
 }
 
 /* Tooltip */
@@ -65,41 +89,39 @@ svg {
   z-index: 10;
 }
 
-/* Story steps (for 3.2 later) */
+/* Story paragraphs */
+
 .step {
   padding-bottom: 3rem;
 }
 
-/* --- File unit visualization --- */
+/* ============================
+   File Unit Visualization
+============================ */
 
 #files {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  margin: 3rem 2rem 2rem 2rem;   /* extra top margin so it breathes under the plot */
   gap: 0.25rem 1rem;
-  max-width: 1100px;
+
+  /* Full width like scrolly */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
+/* Wrapper for each file row */
 #files > div {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
 }
 
+/* File name */
 #files dt {
   grid-column: 1;
   font-weight: bold;
-}
-
-#files dd {
-  grid-column: 2;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: flex-start;
-  gap: 0.15em;
-  padding-top: 0.6em;
-  margin-left: 0;
 }
 
 #files dt code {
@@ -112,7 +134,19 @@ svg {
   opacity: 0.7;
 }
 
-/* One dot per line of code */
+/* Dots container */
+#files dd {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 0.15em;
+  padding-top: 0.6em;
+  margin-left: 0;
+}
+
+/* Each line-of-code dot */
 .loc {
   display: flex;
   width: 0.5em;
@@ -121,7 +155,8 @@ svg {
   border-radius: 50%;
 }
 
-/* Optional: stats box styling (if you want) */
+/* Stats (if present) */
+
 .stats {
   margin-bottom: 1rem;
 }
