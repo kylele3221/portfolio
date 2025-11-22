@@ -1,15 +1,22 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 
 let xScale;
 let yScale;
+
 let allData;
 let allCommits;
 let filteredCommits;
-let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-/* ==============
+let commitProgress = 100;
+let timeScale;
+let commitMaxTime;
+
+const colors = d3.scaleOrdinal(d3.schemeTableau10);
+
+/* ======================
    DATA LOADING
-   ============== */
+====================== */
 
 async function loadData() {
   const data = await d3.csv('loc.csv', row => ({
@@ -24,7 +31,7 @@ async function loadData() {
 }
 
 function processCommits(data) {
-  return d3
+  const commits = d3
     .groups(data, d => d.commit)
     .map(([commit, lines]) => {
       const first = lines[0];
@@ -46,11 +53,16 @@ function processCommits(data) {
       });
       return ret;
     });
+
+  // ensure commits are in chronological order for scrollytelling
+  commits.sort((a, b) => a.datetime - b.datetime);
+
+  return commits;
 }
 
-/* ==============
+/* ======================
    SUMMARY STATS
-   ============== */
+====================== */
 
 function renderCommitInfo(data, commits) {
   const dl = d3.select('#stats').append('dl').attr('class', 'stats');
@@ -83,9 +95,9 @@ function renderCommitInfo(data, commits) {
   dl.append('dd').text(avgFileLength.toFixed(1));
 }
 
-/* ==============
+/* ======================
    TOOLTIP HELPERS
-   ============== */
+====================== */
 
 function renderTooltipContent(commit) {
   const link = document.getElementById('commit-link');
@@ -120,9 +132,9 @@ function updateTooltipPosition(event) {
   tooltip.style.top = `${event.clientY}px`;
 }
 
-/* ==============
+/* ======================
    BRUSH + SELECTION
-   ============== */
+====================== */
 
 function isCommitSelected(selection, commit) {
   if (!selection) return false;
@@ -202,9 +214,9 @@ function createBrushSelector(svg, usableArea, brushedHandler) {
   svg.selectAll('.dots, .overlay ~ *').raise();
 }
 
-/* ==============
+/* ======================
    SCATTER PLOT
-   ============== */
+====================== */
 
 function renderScatterPlot(data, commits) {
   const width = 1000;
@@ -280,7 +292,6 @@ function renderScatterPlot(data, commits) {
     .attr('cx', d => xScale(d.datetime))
     .attr('cy', d => yScale(d.hourFrac))
     .attr('r', d => rScale(d.totalLines))
-    .style('--r', d => rScale(d.totalLines))
     .attr('fill', 'steelblue')
     .style('fill-opacity', 0.7)
     .on('mouseenter', (event, commit) => {
@@ -322,7 +333,6 @@ function updateScatterPlot(data, commits) {
     .attr('cx', d => xScale(d.datetime))
     .attr('cy', d => yScale(d.hourFrac))
     .attr('r', d => rScale(d.totalLines))
-    .style('--r', d => rScale(d.totalLines))
     .attr('fill', 'steelblue')
     .style('fill-opacity', 0.7)
     .on('mouseenter', (event, commit) => {
@@ -337,9 +347,9 @@ function updateScatterPlot(data, commits) {
     });
 }
 
-/* ==============
+/* ======================
    STEP 2 – FILE UNIT VIZ
-   ============== */
+====================== */
 
 function updateFileDisplay(filtered) {
   const lines = filtered.flatMap(d => d.lines);
@@ -376,84 +386,134 @@ function updateFileDisplay(filtered) {
     .style('--color', d => colors(d.type));
 }
 
-/* ==============
-   MAIN FLOW
-   ============== */
+/* ======================
+   SLIDER SETUP
+====================== */
 
-allData = await loadData();
-allCommits = processCommits(allData);
-filteredCommits = allCommits;
+function setupSlider() {
+  timeScale = d3
+    .scaleTime()
+    .domain([
+      d3.min(allCommits, d => d.datetime),
+      d3.max(allCommits, d => d.datetime),
+    ])
+    .range([0, 100]);
 
-renderCommitInfo(allData, allCommits);
-renderScatterPlot(allData, allCommits);
-updateFileDisplay(filteredCommits);
+  commitMaxTime = timeScale.invert(commitProgress);
 
-/* ==============
-   SLIDER (STEP 1.1–1.2)
-   ============== */
-
-let commitProgress = 100;
-
-let timeScale = d3
-  .scaleTime()
-  .domain([
-    d3.min(allCommits, d => d.datetime),
-    d3.max(allCommits, d => d.datetime),
-  ])
-  .range([0, 100]);
-
-let commitMaxTime = timeScale.invert(commitProgress);
-
-function onTimeSliderChange() {
   const slider = document.querySelector('#commit-progress');
   const timeEl = document.querySelector('#commit-time');
 
-  commitProgress = +slider.value;
-  commitMaxTime = timeScale.invert(commitProgress);
+  function onTimeSliderChange() {
+    commitProgress = +slider.value;
+    commitMaxTime = timeScale.invert(commitProgress);
 
-  timeEl.textContent = commitMaxTime.toLocaleString(undefined, {
-    dateStyle: 'long',
-    timeStyle: 'short',
-  });
+    timeEl.textContent = commitMaxTime.toLocaleString(undefined, {
+      dateStyle: 'long',
+      timeStyle: 'short',
+    });
 
-  const newFiltered = allCommits.filter(d => d.datetime <= commitMaxTime);
+    const newFiltered = allCommits.filter(d => d.datetime <= commitMaxTime);
 
-  updateScatterPlot(allData, newFiltered);
-  updateFileDisplay(newFiltered);
+    updateScatterPlot(allData, newFiltered);
+    updateFileDisplay(newFiltered);
+  }
+
+  if (slider) {
+    slider.addEventListener('input', onTimeSliderChange);
+    onTimeSliderChange(); // initialize
+  }
 }
 
-const slider = document.querySelector('#commit-progress');
-if (slider) {
-  slider.addEventListener('input', onTimeSliderChange);
-  onTimeSliderChange();
+/* ======================
+   STEP 3.2 – STORY TEXT
+====================== */
+
+function setupStoryText() {
+  d3
+    .select('#scatter-story')
+    .selectAll('.step')
+    .data(allCommits)
+    .join('div')
+    .attr('class', 'step')
+    .html((d, i) => `
+      <p>
+        On ${d.datetime.toLocaleString('en', {
+          dateStyle: 'full',
+          timeStyle: 'short',
+        })},
+        I made <a href="${d.url}" target="_blank" rel="noopener noreferrer">
+          ${i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'}
+        </a>.
+        I edited ${d.totalLines} lines across ${
+          d3.rollups(
+            d.lines,
+            D => D.length,
+            l => l.file
+          ).length
+        } files.
+        Then I looked over all I had made, and I saw that it was very good.
+      </p>
+    `);
 }
 
-/* ==============
-   STEP 3.2 – COMMIT STORY TEXT
-   ============== */
+/* ======================
+   STEP 3.3 – SCROLLAMA
+====================== */
 
-d3
-  .select('#scatter-story')
-  .selectAll('.step')
-  .data(allCommits)
-  .join('div')
-  .attr('class', 'step')
-  .html((d, i) => `
-    <p>
-      On ${d.datetime.toLocaleString('en', {
-        dateStyle: 'full',
+function setupScrollama() {
+  function onStepEnter(response) {
+    const commit = response.element.__data__;
+    if (!commit) return;
+
+    // update commitMaxTime based on this commit
+    commitMaxTime = commit.datetime;
+    commitProgress = timeScale(commitMaxTime);
+
+    const slider = document.querySelector('#commit-progress');
+    const timeEl = document.querySelector('#commit-time');
+
+    if (slider) {
+      slider.value = commitProgress;
+    }
+
+    if (timeEl) {
+      timeEl.textContent = commitMaxTime.toLocaleString(undefined, {
+        dateStyle: 'long',
         timeStyle: 'short',
-      })},
-      I made <a href="${d.url}" target="_blank" rel="noopener noreferrer">
-        ${i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'}
-      </a>.
-      I edited ${d.totalLines} lines across ${
-        d3.rollups(
-          d.lines,
-          D => D.length,
-          l => l.file
-        ).length
-      } files.
-      Then I looked over all I had made, and I saw that it was very good.
-    </p>
-  `);
+      });
+    }
+
+    const newFiltered = allCommits.filter(d => d.datetime <= commitMaxTime);
+    updateScatterPlot(allData, newFiltered);
+    updateFileDisplay(newFiltered);
+  }
+
+  const scroller = scrollama();
+  scroller
+    .setup({
+      container: '#scrolly-1',
+      step: '#scrolly-1 .step',
+    })
+    .onStepEnter(onStepEnter);
+}
+
+/* ======================
+   INIT
+====================== */
+
+async function init() {
+  allData = await loadData();
+  allCommits = processCommits(allData);
+  filteredCommits = allCommits;
+
+  renderCommitInfo(allData, allCommits);
+  renderScatterPlot(allData, allCommits);
+  updateFileDisplay(filteredCommits);
+
+  setupSlider();
+  setupStoryText();
+  setupScrollama();
+}
+
+init();
