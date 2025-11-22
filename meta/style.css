@@ -18,36 +18,30 @@ body {
 }
 
 /* ============================
-   SCROLLY FULL-WIDTH LAYOUT
+   Scrolly layout (50/50 split)
 ============================ */
 
 #scrolly-1 {
   position: relative;
   display: flex;
   gap: 1.5rem;
-
-  /* Full-bleed effect */
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  padding: 1.5rem 2rem 2rem 2rem;
-  box-sizing: border-box;
+  margin: 0 2rem 2rem 2rem; /* normal centered-ish content */
 }
 
-/* Left column (story) */
+/* Left column: story text */
 #scatter-story {
   position: relative;
   flex: 1;
-  max-width: 24rem;
 }
 
-/* Right column (plot) */
+/* Right column: graph */
 #scatter-plot {
-  flex: 3;
+  flex: 1;
   position: sticky;
   top: 0;
   left: 0;
   bottom: auto;
-  height: 50vh;
+  height: 50vh;  /* per Step 3.1 requirement */
   background: #ffffff;
 }
 
@@ -89,7 +83,7 @@ circle.selected {
   z-index: 10;
 }
 
-/* Story paragraphs */
+/* Story paragraphs (.step from 3.2) */
 
 .step {
   padding-bottom: 3rem;
@@ -103,11 +97,7 @@ circle.selected {
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 0.25rem 1rem;
-
-  /* Full width like scrolly */
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  padding: 2rem;
+  margin: 3rem 2rem 2rem 2rem;
   box-sizing: border-box;
 }
 
@@ -155,7 +145,7 @@ circle.selected {
   border-radius: 50%;
 }
 
-/* Stats (if present) */
+/* Stats block in #scatter-plot */
 
 .stats {
   margin-bottom: 1rem;
